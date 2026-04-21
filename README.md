@@ -26,37 +26,38 @@ The following attributes are required for each user:
 
 * username - The user's username.
 * name - The full name of the user (gecos field).
+* append - If true, will only add groups, not set them to just the list in groups (optional).
+* generate_ssh_key - Whether to generate a SSH key for the user (optional, defaults to false).
+* group - Optional primary group override.
+* groups - A list of supplementary groups for the user.
 * home - The home directory of the user to create (optional, defaults to /home/username).
+* password - If a hash is provided then that will be used, but otherwise the
+  account will be locked.
+* passwordless_sudo - Create sudoers include file that allows every execution without password prompt (optional).
+* profile - A string block for setting custom shell profiles (optional).
+* shell - The user's shell. This defaults to /bin/bash. The default is
+  configurable using the users_default_shell variable if you want to give all
+  users the same shell, but it is different than /bin/bash.
+* ssh_key - This should be a list of SSH keys for the user (optional). Each SSH key
+  should be included directly and should have no newlines.
 * uid - The numeric user id for the user (optional). This is required for uid consistency
   across systems.
 * gid - The numeric group id for the group (optional). Otherwise, the
   uid will be used.
-* password - If a hash is provided then that will be used, but otherwise the
-  account will be locked.
 * update_password - This can be either 'always' or 'on_create'
   - 'always' will update passwords if they differ. (default)
   - 'on_create' will only set the password for newly created users.
-* group - Optional primary group override.
-* groups - A list of supplementary groups for the user.
-* append - If true, will only add groups, not set them to just the list in groups (optional).
-* profile - A string block for setting custom shell profiles.
-* ssh_key - This should be a list of SSH keys for the user (optional). Each SSH key
-  should be included directly and should have no newlines.
-* generate_ssh_key - Whether to generate a SSH key for the user (optional, defaults to false).
-
-In addition, the following items are optional for each user:
-
-* shell - The user's shell. This defaults to /bin/bash. The default is
-  configurable using the users_default_shell variable if you want to give all
-  users the same shell, but it is different than /bin/bash.
 
 Example:
 
+```yaml
     ---
     users:
       - username: foo
         name: Foo Barrington
-        groups: ['wheel','systemd-journal']
+        groups:
+          - wheel
+          - systemd-journal
         uid: 1001
         home: /local/home/foo
         profile: |
@@ -71,6 +72,7 @@ Example:
       - username: bar
         name: Bar User
         uid: 1002
+```
 
 ## Deleting users
 
@@ -83,8 +85,12 @@ that numeric user ids are not accidentally reused.
 You can optionally choose to remove the user's home directory and mail spool with
 the `remove` parameter, and force removal of files with the `force` parameter.
 
+Example:
+
+```yaml
     users_deleted:
       - username: bar
         uid: 1002
         remove: true
         force: true
+```

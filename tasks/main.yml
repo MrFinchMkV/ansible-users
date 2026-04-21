@@ -63,11 +63,34 @@
   when: users_create_homedirs and item.profile is defined
   with_items: "{{ users }}"
 
+- name: Create sudoers include
+  ansible.builtin.template:
+    src: pwless_sudo.j2
+    dest: "/etc/sudoers.d/{{ item.username }}"
+    mode: "0440"
+    owner: root
+    group: root
+    validate: /usr/sbin/visudo -cf %s
+  with_items: "{{ users }}"
+  when: passwordless_sudo in item and item.passwordless_sudo
+  tags:
+    - configuration
+    - users
+
 - name: Remove user(s)
   ansible.builtin.user:
     name: "{{ item.username }}"
     force: "{{ item.force | default(omit) }}"
     remove: "{{ item.remove | default(omit) }}"
+    state: absent
+  with_items: "{{ users_deleted }}"
+  tags:
+    - configuration
+    - users
+
+- name: Remove user(s) from /etc/sudoers.d
+  ansible.builtin.file:
+    path: "/etc/sudoers.d/{{ item.username }}"
     state: absent
   with_items: "{{ users_deleted }}"
   tags:
