@@ -73,7 +73,8 @@
     group: root
     validate: /usr/sbin/visudo -cf %s
   with_items: "{{ users }}"
-  when: passwordless_sudo in item and item.passwordless_sudo
+  when: >
+    'passwordless_sudo' in item and item.passwordless_sudo
   tags:
     - configuration
     - users
