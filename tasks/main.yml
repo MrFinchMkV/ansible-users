@@ -23,17 +23,16 @@
 - name: Create user(s)
   ansible.builtin.user:
     name: "{{ item.username }}"
-    group: "{{ item.group | default(item.username if users_create_per_user_group else users_group) }}"
-    # empty string removes user from all secondary groups
-    groups: "{{ item.groups | join(',') if 'groups' in item else '' }}"
     append: "{{ item.append | default(omit) }}"
-    shell: "{{ item.shell if item.shell is defined else users_default_shell }}"
-    password: "{{ item.password if item.password is defined else '!' }}"
     comment: "{{ item.name if item.name is defined else '' }}"
-    uid: "{{ item.uid | default(omit) }}"
-    home: "{{ item.home | default('/home/' + item.username) }}"
-    createhome: "{{ 'yes' if users_create_homedirs else 'no' }}"
+    createhome: "{{ 'true' if users_create_homedirs else 'false' }}"
     generate_ssh_key: "{{ item.generate_ssh_key | default(omit) }}"
+    group: "{{ item.group | default(item.username if users_create_per_user_group else users_group) }}"
+    groups: "{{ item.groups | join(',') if 'groups' in item else '' }}" # Empty string removes user from all secondary groups
+    home: "{{ item.home | default('/home/' + item.username) }}"
+    password: "{{ item.password if item.password is defined else '!' }}"
+    shell: "{{ item.shell if item.shell is defined else users_default_shell }}"
+    uid: "{{ item.uid | default(omit) }}"
     update_password: "{{ item.update_password | default(omit) }}"
   with_items: "{{ users }}"
   tags:
@@ -67,9 +66,9 @@
 - name: Remove user(s)
   ansible.builtin.user:
     name: "{{ item.username }}"
-    state: absent
-    remove: "{{ item.remove | default(omit) }}"
     force: "{{ item.force | default(omit) }}"
+    remove: "{{ item.remove | default(omit) }}"
+    state: absent
   with_items: "{{ users_deleted }}"
   tags:
     - configuration

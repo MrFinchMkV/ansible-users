@@ -38,11 +38,11 @@ The following attributes are required for each user:
   - 'on_create' will only set the password for newly created users.
 * group - Optional primary group override.
 * groups - A list of supplementary groups for the user.
-* append - If yes, will only add groups, not set them to just the list in groups (optional).
+* append - If true, will only add groups, not set them to just the list in groups (optional).
 * profile - A string block for setting custom shell profiles.
 * ssh_key - This should be a list of SSH keys for the user (optional). Each SSH key
   should be included directly and should have no newlines.
-* generate_ssh_key - Whether to generate a SSH key for the user (optional, defaults to no).
+* generate_ssh_key - Whether to generate a SSH key for the user (optional, defaults to false).
 
 In addition, the following items are optional for each user:
 
@@ -86,5 +86,5 @@ the `remove` parameter, and force removal of files with the `force` parameter.
     users_deleted:
       - username: bar
         uid: 1002
-        remove: yes
-        force: yes
+        remove: true
+        force: true
