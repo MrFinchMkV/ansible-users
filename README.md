@@ -40,6 +40,7 @@ The following attributes are required for each user:
   users the same shell, but it is different than /bin/bash.
 * ssh_key - This should be a list of SSH keys for the user (optional). Each SSH key
   should be included directly and should have no newlines.
+* system - Whether the user is a system user or not. This setting cannot be changed on existing users.
 * uid - The numeric user id for the user (optional). This is required for uid consistency
   across systems.
 * gid - The numeric group id for the group (optional). Otherwise, the
