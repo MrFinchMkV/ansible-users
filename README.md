@@ -52,27 +52,27 @@ The following attributes are required for each user:
 Example:
 
 ```yaml
-    ---
-    users:
-      - username: foo
-        name: Foo Barrington
-        groups:
-          - wheel
-          - systemd-journal
-        uid: 1001
-        home: /local/home/foo
-        profile: |
-          alias ll='ls -lah'
-        ssh_key:
-          - "ssh-rsa AAAAA.... foo@machine"
-          - "ssh-rsa AAAAB.... foo2@machine"
-    groups_to_create:
-      - name: developers
-        gid: 10000
-    users_deleted:
-      - username: bar
-        name: Bar User
-        uid: 1002
+---
+users:
+  - username: foo
+    name: Foo Barrington
+    groups:
+      - wheel
+      - systemd-journal
+    uid: 1001
+    home: /local/home/foo
+    profile: |
+      alias ll='ls -lah'
+    ssh_key:
+      - "ssh-rsa AAAAA.... foo@machine"
+      - "ssh-rsa AAAAB.... foo2@machine"
+groups_to_create:
+  - name: developers
+    gid: 10000
+users_deleted:
+  - username: bar
+    name: Bar User
+    uid: 1002
 ```
 
 ## Deleting users
@@ -89,9 +89,9 @@ the `remove` parameter, and force removal of files with the `force` parameter.
 Example:
 
 ```yaml
-    users_deleted:
-      - username: bar
-        uid: 1002
-        remove: true
-        force: true
+users_deleted:
+  - username: bar
+    uid: 1002
+    remove: true
+    force: true
 ```
